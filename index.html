@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#4f46e5" />
+<title>Proyección Ética · Estaciones 1, 2 y 3</title>
+<style>
+:root{
+  --ink:#172033; --muted:#5b6478; --brand:#4f46e5; --brand-2:#0ea5e9;
+  --line:#e5e7eb; --soft:#eef2ff; --ok:#059669; --err:#b91c1c; --warn:#d97706;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 10% 10%,#c7d2fe 0,transparent 35%),
+    radial-gradient(circle at 90% 0%,#bae6fd 0,transparent 30%),
+    linear-gradient(160deg,#eef2ff,#f8fafc 60%,#ecfeff);
+  min-height:100vh; min-height:100svh;
+  display:grid; place-items:center;
+  padding:clamp(10px,3vw,28px);
+}
+.app{
+  width:min(100%,900px); background:rgba(255,255,255,.95);
+  border:1px solid rgba(255,255,255,.8); border-radius:28px;
+  box-shadow:0 24px 70px rgba(15,23,42,.18); overflow:hidden;
+  backdrop-filter:blur(10px);
+}
+header{
+  padding:clamp(18px,4vw,32px);
+  background:linear-gradient(135deg,#312e81,#4f46e5 55%,#0ea5e9);
+  color:#fff;
+}
+.kicker{margin:0 0 8px; font-size:.78rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; opacity:.9}
+h1{margin:0; font-size:clamp(1.5rem,4.6vw,2.35rem); line-height:1.08; letter-spacing:-.03em}
+.subtitle{margin:10px 0 0; max-width:64ch; color:rgba(255,255,255,.92); line-height:1.5; font-size:clamp(.94rem,2.4vw,1.05rem)}
+.screen{padding:clamp(18px,4vw,34px)}
+.hidden{display:none!important}
+h2{margin:0 0 10px; font-size:clamp(1.2rem,3.4vw,1.55rem); letter-spacing:-.02em; line-height:1.2}
+h3{margin:0 0 8px; font-size:1.02rem}
+p{line-height:1.6}
+.note{margin:16px 0; padding:14px 16px; border-left:4px solid var(--brand); background:var(--soft); border-radius:12px; color:#3730a3; line-height:1.55}
+.field{display:grid; gap:7px; margin-bottom:16px}
+label{font-weight:700; font-size:.9rem}
+input{
+  width:100%; min-height:48px; border:1px solid var(--line); border-radius:14px;
+  padding:12px 14px; font:inherit; color:var(--ink); background:#fff; outline:none;
+}
+input:focus{border-color:#818cf8; box-shadow:0 0 0 4px rgba(79,70,229,.12)}
+.question{margin:0 0 16px; font-size:clamp(1.05rem,2.8vw,1.25rem); font-weight:750; line-height:1.35}
+
+/* Botones generales */
+.btn{
+  appearance:none; border:0; border-radius:14px; padding:14px 18px; font:inherit; font-weight:800;
+  cursor:pointer; min-height:48px; transition:transform .15s,box-shadow .15s;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:focus-visible{outline:3px solid rgba(79,70,229,.35); outline-offset:2px}
+.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:0 10px 24px rgba(79,70,229,.28)}
+.btn.secondary{background:var(--soft); color:#3730a3}
+.btn.ghost{background:transparent; color:var(--muted); border:1px solid var(--line)}
+.actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; justify-content:center;}
+
+/* Menú Principal */
+.menu{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.station-card{
+  appearance:none; text-align:left; background:#fff; border:1px solid var(--line);
+  border-radius:20px; padding:20px; cursor:pointer; display:flex; flex-direction:column; gap:6px;
+  font:inherit; color:var(--ink); transition:border-color .15s,box-shadow .15s,transform .15s;
+}
+.station-card:hover,.station-card:focus-visible{border-color:#818cf8; box-shadow:0 14px 36px rgba(79,70,229,.16); transform:translateY(-2px); outline:none}
+.station-num{font-size:.78rem; font-weight:850; letter-spacing:.12em; color:var(--brand)}
+.station-title{font-size:1.1rem; font-weight:800; letter-spacing:-.01em}
+.station-desc{color:var(--muted); font-size:.9rem; line-height:1.45}
+
+/* Fase 1 */
+.answers{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.answer{
+  appearance:none; text-align:left; background:#fff; border:1px solid var(--line);
+  border-radius:18px; padding:16px; cursor:pointer; display:flex; flex-direction:column; gap:8px;
+  font:inherit; color:var(--ink); min-height:145px; transition:border-color .15s,box-shadow .15s,transform .15s;
+}
+.answer:hover,.answer:focus-visible{border-color:#818cf8; box-shadow:0 10px 30px rgba(79,70,229,.14); transform:translateY(-2px); outline:none}
+.answer .tag{font-size:.72rem; font-weight:850; letter-spacing:.08em; text-transform:uppercase; color:var(--brand)}
+.answer strong{font-size:clamp(1rem,2.4vw,1.12rem); line-height:1.25}
+.answer small{color:var(--muted); line-height:1.45; font-size:.9rem}
+.result-career{margin:0 0 12px; color:var(--muted); font-size:.92rem; font-weight:650}
+.sticker{
+  width:min(100%,360px); margin:0 auto 20px; padding:20px; text-align:center;
+  border:3px dashed var(--brand); border-radius:24px; background:linear-gradient(180deg,#eef2ff,#fff); transform:rotate(-1.5deg);
+}
+.sticker-emoji{font-size:clamp(2.4rem,8vw,3.5rem); line-height:1}
+.sticker-label{margin-top:8px; font-size:.74rem; font-weight:850; letter-spacing:.12em; text-transform:uppercase; color:var(--brand)}
+.sticker-virtue{margin-top:4px; font-size:clamp(1.6rem,6vw,2.2rem); font-weight:900; color:#312e81; letter-spacing:-.02em}
+.closing{margin-top:18px; padding:16px; border-radius:16px; background:#f8fafc; border:1px solid var(--line)}
+.closing p{margin:0; color:var(--muted)}
+
+/* Fase 2 */
+.area-grid{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); margin-bottom:16px}
+.area-btn{
+  appearance:none; text-align:left; background:#fff; border:1px solid var(--line);
+  border-radius:14px; padding:14px 16px; cursor:pointer; font:inherit; font-weight:700;
+  color:var(--ink); min-height:56px; transition:border-color .15s,box-shadow .15s,transform .15s;
+}
+.area-btn:hover,.area-btn:focus-visible{border-color:#818cf8; box-shadow:0 8px 20px rgba(79,70,229,.12); transform:translateY(-1px); outline:none}
+.scenario-card{padding:18px; border-radius:18px; background:#f8fafc; border:1px solid var(--line); margin:0 0 16px}
+.scenario-tag{font-size:.74rem; font-weight:850; letter-spacing:.12em; text-transform:uppercase; color:var(--brand)}
+.scenario-text{margin:8px 0 0; font-size:clamp(1.05rem,2.8vw,1.2rem); font-weight:700; line-height:1.4}
+.choice-row{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.choice{
+  appearance:none; text-align:left; border:1px solid var(--line); border-radius:18px;
+  padding:16px; cursor:pointer; display:flex; flex-direction:column; gap:6px; font:inherit;
+  color:var(--ink); background:#fff; min-height:110px; transition:border-color .15s,box-shadow .15s,transform .15s;
+}
+.choice:hover,.choice:focus-visible{border-color:#818cf8; box-shadow:0 10px 30px rgba(79,70,229,.14); transform:translateY(-2px); outline:none}
+.choice strong{font-size:1.05rem}
+.choice small{color:var(--muted); line-height:1.45}
+.result-badge{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; font-weight:800; font-size:.85rem; margin-bottom:12px}
+.result-badge.ok{background:#ecfdf5; color:var(--ok)}
+.result-badge.bad{background:#fef2f2; color:var(--err)}
+.certificate{margin-top:16px; padding:20px; border:3px double #312e81; border-radius:20px; background:linear-gradient(180deg,#fefce8,#fff); text-align:center}
+.cert-title{font-size:.78rem; font-weight:850; letter-spacing:.12em; text-transform:uppercase; color:#312e81}
+.cert-name{font-size:clamp(1.3rem,4vw,1.7rem); font-weight:900; margin:8px 0 2px; color:var(--ink); letter-spacing:-.02em}
+.cert-career{color:var(--muted); font-weight:600}
+.cert-text{margin:12px 0 0; font-style:italic; color:#3730a3; line-height:1.55}
+.cert-foot{margin-top:12px; font-size:.8rem; color:var(--muted)}
+
+/* Fase 3 */
+.roulette-container{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-height:220px; padding:24px; background:#f8fafc; border:2px dashed var(--brand);
+  border-radius:24px; margin:20px 0; text-align:center; transition:all .3s ease;
+}
+.roulette-text{font-size:clamp(1.1rem, 3.5vw, 1.4rem); font-weight:800; color:#312e81; margin:0; line-height:1.4;}
+.spinning .roulette-text{filter:blur(3px); opacity:0.7;}
+.timer-bar-container{width:100%; background:#e2e8f0; border-radius:999px; height:12px; margin:16px 0; overflow:hidden;}
+.timer-bar{height:100%; background:var(--brand); width:100%; transition:width 1s linear, background-color 0.3s ease;}
+.timer-bar.warn{background:var(--warn);}
+.timer-bar.danger{background:var(--err);}
+.timer-text{text-align:center; font-size:2rem; font-weight:900; color:var(--brand); margin:10px 0; font-variant-numeric:tabular-nums;}
+.timer-text.danger{color:var(--err); animation:pulse 1s infinite;}
+@keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.1);}100%{transform:scale(1);}}
+.dilemma-box{padding:20px; background:#f8fafc; border:1px solid var(--line); border-radius:18px; margin-bottom:16px;}
+.dilemma-tag{font-size:.74rem; font-weight:850; letter-spacing:.12em; text-transform:uppercase; color:var(--brand);}
+.dilemma-text{margin:8px 0 0; font-size:clamp(1.05rem,2.8vw,1.2rem); font-weight:700; line-height:1.4;}
+.questions{background:#fff; padding:16px; border-radius:16px; border:1px solid var(--line);}
+.questions p{margin:0 0 10px; font-weight:700;}
+.questions ul{margin:0; padding-left:20px; color:var(--muted);}
+.questions li{margin-bottom:8px;}
+.step-card{
+  display:flex; gap:16px; align-items:flex-start; padding:16px;
+  background:#fff; border:1px solid var(--line); border-radius:16px; margin-bottom:12px;
+}
+.step-num{
+  display:flex; align-items:center; justify-content:center;
+  width:36px; height:36px; border-radius:50%; background:var(--brand); color:#fff; font-weight:900; flex-shrink:0;
+}
+.step-content strong{display:block; font-size:1.05rem; margin-bottom:4px; color:var(--ink);}
+.step-content p{margin:0; color:var(--muted); font-size:.95rem;}
+
+footer.footer{padding:14px clamp(18px,4vw,34px); border-top:1px solid var(--line); color:var(--muted); font-size:.82rem; line-height:1.5; background:#fff; text-align:center;}
+
+@media (max-width:520px){
+  .app{border-radius:20px}
+  .answers,.choice-row{grid-template-columns:1fr}
+  .answer,.choice{min-height:auto}
+  .sticker{transform:none}
+  .actions{flex-direction:column;}
+  .btn{width:100%;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important; animation:none!important}
+}
+</style>
+</head>
+<body>
+<main class="app" aria-labelledby="app-title">
+  <header>
+    <p class="kicker">Proyección ética a la comunidad académica</p>
+    <h1 id="app-title">Aristóteles, Kant y el Mundo Real</h1>
+    <p class="subtitle">Tres estaciones interactivas para descubrir qué tipo de profesional estás siendo.</p>
+  </header>
+
+  <!-- HOME -->
+  <section data-screen="home" class="screen">
+    <h2>Elige una estación</h2>
+    <p>Cada estación dura entre 2 y 4 minutos. Puedes hacer una, dos o las tres.</p>
+    <div class="menu">
+      <button class="station-card" data-go="s1-intro" type="button">
+        <span class="station-num">FASE 01</span>
+        <span class="station-title">El Termómetro del Carácter</span>
+        <span class="station-desc">Aristóteles · virtud y término medio</span>
+      </button>
+      <button class="station-card" data-go="s2-intro" type="button">
+        <span class="station-num">FASE 02</span>
+        <span class="station-title">El Escáner Kantiano</span>
+        <span class="station-desc">Kant · medio vs. fin en sí mismo</span>
+      </button>
+      <button class="station-card" data-go="s3-intro" type="button">
+        <span class="station-num">FASE 03</span>
+        <span class="station-title">La Ruleta del Conflicto</span>
+        <span class="station-desc">Ética aplicada · dilemas y costo personal</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ================= FASE 1 ================= -->
+  <section data-screen="s1-intro" class="screen hidden">
+    <p class="kicker" style="color:var(--brand)">Estación 1 · Aristóteles</p>
+    <h2>El Termómetro del Carácter</h2>
+    <p>Una brújula rápida para descubrir qué virtud profesional necesitas cultivar.</p>
+    <div class="note"><strong>Idea clave:</strong> para Aristóteles, las normas no bastan; hay que formar el carácter con hábitos.</div>
+    <div class="actions">
+      <button class="btn primary" data-go="s1-question" type="button">Comenzar</button>
+      <button class="btn ghost" data-go="home" type="button">Volver al menú</button>
+    </div>
+  </section>
+
+  <section data-screen="s1-question" class="screen hidden">
+    <div class="field">
+      <label for="career1">Tu carrera (opcional)</label>
+      <input id="career1" type="text" placeholder="Ej.: Medicina, Derecho, Ingeniería..." autocomplete="off" />
+    </div>
+    <p class="question">Frente a una injusticia en tu profesión, ¿qué haces?</p>
+    <div class="answers" role="group" aria-label="Opciones de respuesta">
+      <button class="answer" data-answer="deficit" type="button">
+        <span class="tag">Defecto</span>
+        <strong>Callo para no tener problemas</strong>
+        <small>Prefiero no intervenir, aunque algo no sea justo.</small>
+      </button>
+      <button class="answer" data-answer="excess" type="button">
+        <span class="tag">Exceso</span>
+        <strong>Exploto y respondo agresivamente</strong>
+        <small>Reacciono con enojo, sin medir consecuencias.</small>
+      </button>
+      <button class="answer" data-answer="mean" type="button">
+        <span class="tag">Término medio</span>
+        <strong>Actúo con prudencia y valentía</strong>
+        <small>Delibero, defiendo lo justo y cuido el modo de hacerlo.</small>
+      </button>
+    </div>
+    <div class="actions">
+      <button class="btn ghost" data-go="home" type="button">Volver al menú</button>
+    </div>
+  </section>
+
+  <section data-screen="s1-result" class="screen hidden" aria-live="polite">
+    <p class="result-career" id="s1-career"></p>
+    <div class="sticker">
+      <div class="sticker-emoji" id="s1-emoji">⚖️</div>
+      <div class="sticker-label">Virtud a cultivar</div>
+      <div class="sticker-virtue" id="s1-virtue">Justicia</div>
+    </div>
+    <h2 id="s1-title"></h2>
+    <p id="s1-feedback"></p>
+    <div class="closing">
+      <h3>Cierre breve</h3>
+      <p id="s1-closing"></p>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="s1-reset" type="button">Volver a intentar</button>
+      <button class="btn secondary" data-go="s2-intro" type="button">Ir a la Estación 2</button>
+      <button class="btn ghost" data-go="home" type="button">Menú</button>
+    </div>
+  </section>
+
+  <!-- ================= FASE 2 ================= -->
+  <section data-screen="s2-intro" class="screen hidden">
+    <p class="kicker" style="color:var(--brand)">Estación 2 · Kant</p>
+    <h2>El Escáner Kantiano</h2>
+    <p>Elige tu área y recibe un escenario. Después decide si trata a la persona como <strong>medio</strong> o como <strong>fin en sí misma</strong>.</p>
+    <div class="note"><strong>Idea clave:</strong> las personas tienen dignidad, no precio. No pueden usarse solo como instrumentos.</div>
+    <div class="actions">
+      <button class="btn primary" data-go="s2-area" type="button">Comenzar</button>
+      <button class="btn ghost" data-go="home" type="button">Volver al menú</button>
+    </div>
+  </section>
+
+  <section data-screen="s2-area" class="screen hidden">
+    <h2>Elige tu área</h2>
+    <p style="color:var(--muted);margin-top:0">Si tu carrera no aparece, elige “General”.</p>
+    <div class="area-grid" id="area-grid"></div>
+    <div class="actions">
+      <button class="btn ghost" data-go="home" type="button">Volver al menú</button>
+    </div>
+  </section>
+
+  <section data-screen="s2-scenario" class="screen hidden">
+    <div class="field">
+      <label for="career2">Tu nombre o carrera (opcional, para el compromiso)</label>
+      <input id="career2" type="text" placeholder="Ej.: Ana · Medicina" autocomplete="off" />
+    </div>
+    <div class="scenario-card">
+      <div class="scenario-tag" id="s2-area-label">Escenario</div>
+      <p class="scenario-text" id="s2-scenario-text"></p>
+    </div>
+    <p class="question">¿Esta acción trata a la persona como…?</p>
+    <div class="choice-row">
+      <button class="choice" data-choice="medio" type="button">
+        <strong>Medio (instrumento)</strong>
+        <small>Se usa a la persona para lograr algo.</small>
+      </button>
+      <button class="choice" data-choice="fin" type="button">
+        <strong>Fin en sí mismo (dignidad)</strong>
+        <small>Se reconoce su valor propio y su autonomía.</small>
+      </button>
+    </div>
+    <div class="actions">
+      <button class="btn ghost" data-go="s2-area" type="button">Cambiar área</button>
+      <button class="btn ghost" data-go="home" type="button">Menú</button>
+    </div>
+  </section>
+
+  <section data-screen="s2-result" class="screen hidden" aria-live="polite">
+    <div id="s2-badge" class="result-badge"></div>
+    <h2 id="s2-title"></h2>
+    <p id="s2-feedback"></p>
+    <div class="closing">
+      <h3>Cierre breve</h3>
+      <p id="s2-closing"></p>
+    </div>
+
+    <div id="s2-commit-wrap">
+      <div class="field" style="margin-top:18px">
+        <label for="name2">Tu nombre para el compromiso</label>
+        <input id="name2" type="text" placeholder="Escribe tu nombre" autocomplete="off" />
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="s2-sign" type="button">Firmar compromiso kantiano</button>
+      </div>
+    </div>
+
+    <div id="s2-cert" class="certificate hidden">
+      <div class="cert-title">Compromiso con el Imperativo Categórico</div>
+      <div class="cert-name" id="cert-name">—</div>
+      <div class="cert-career" id="cert-career">—</div>
+      <p class="cert-text">“Me comprometo a tratar a las personas siempre como fines en sí mismas y nunca solo como medios; a obrar como si mi acción pudiera convertirse en ley universal.”</p>
+      <div class="cert-foot" id="cert-date">— · Comparte una captura de este compromiso.</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn secondary" id="s2-retry" type="button">Otro escenario</button>
+      <button class="btn primary" data-go="s3-intro" type="button">Ir a la Estación 3</button>
+      <button class="btn ghost" data-go="home" type="button">Menú</button>
+    </div>
+  </section>
+
+  <!-- ================= FASE 3 ================= -->
+  <section data-screen="s3-intro" class="screen hidden">
+    <p class="kicker" style="color:var(--brand)">Estación 3 · Ética aplicada</p>
+    <h2>La Ruleta del Conflicto</h2>
+    <p>La ruleta elegirá al azar un dilema ético. Tendrás <strong>30 segundos</strong> para responder:</p>
+    <div class="note">
+      <strong>¿Es una decisión conveniente o moralmente correcta?</strong><br>
+      <strong>¿Qué costo personal asumirías por defender tu ética?</strong>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="start-btn" type="button">Girar la Ruleta</button>
+      <button class="btn ghost" data-go="home" type="button">Volver al menú</button>
+    </div>
+  </section>
+
+  <section data-screen="s3-spin" class="screen hidden">
+    <h2>La ruleta está girando...</h2>
+    <div class="roulette-container spinning" id="roulette-box">
+      <p class="roulette-text" id="roulette-text">Preparando dilema...</p>
+    </div>
+  </section>
+
+  <section data-screen="s3-dilemma" class="screen hidden">
+    <div class="timer-bar-container">
+      <div class="timer-bar" id="timer-bar"></div>
+    </div>
+    <div class="timer-text" id="timer-text">30s</div>
+    
+    <div class="dilemma-box">
+      <div class="dilemma-tag">Tu dilema</div>
+      <p class="dilemma-text" id="dilemma-text"></p>
+    </div>
+
+    <div class="questions">
+      <p>Responde en voz alta:</p>
+      <ul>
+        <li>¿Esta decisión es <strong>conveniente</strong> o <strong>moralmente correcta</strong>?</li>
+        <li>¿Qué <strong>costo personal</strong> asumirías por defender tu ética?</li>
+      </ul>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="finish-btn" type="button">Terminar y ver el procedimiento</button>
+    </div>
+  </section>
+
+  <section data-screen="s3-result" class="screen hidden">
+    <h2>¿Cómo afrontar estos conflictos?</h2>
+    <p style="color:var(--muted); margin-bottom:20px;">Sigue este procedimiento de 3 pasos en la vida real:</p>
+
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <strong>Pausa y evalúa</strong>
+        <p>No reacciones en caliente. Identifica qué está en juego (tu puesto, dinero, amistades) y qué principios éticos están siendo afectados.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <strong>Revisa la dignidad</strong>
+        <p>Usa el escáner de Kant: ¿esta acción trata a alguien como medio o como fin? Usa la virtud de Aristóteles: ¿estás cayendo en el exceso o el defecto?</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <strong>Decide y asume el costo</strong>
+        <p>Actúa de forma correcta, no solo conveniente. Acepta el costo personal (críticas, pérdida de privilegios) como parte de tu integridad profesional.</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn secondary" id="retry-btn" type="button">Girar de nuevo</button>
+      <button class="btn primary" data-go="home" type="button">Finalizar y volver al inicio</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    Aristóteles: la virtud es un hábito. Kant: trata a las personas como fines. Tú: decide qué profesional serás.
+  </footer>
+</main>
+
+<script>
+(function () {
+  // --- Navegación y control de temporizador ---
+  const screens = document.querySelectorAll("[data-screen]");
+  let timerInterval = null; 
+
+  function show(name) {
+    // Si salimos de la pantalla del dilema, detenemos el temporizador
+    if (timerInterval && name !== "s3-dilemma") {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+    screens.forEach(s => s.classList.toggle("hidden", s.dataset.screen !== name));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  document.querySelectorAll("[data-go]").forEach(el => {
+    el.addEventListener("click", () => show(el.dataset.go));
+  });
+
+  /* ================= FASE 1 ================= */
+  const s1Results = {
+    deficit: {
+      title: "Callar también puede ser un defecto",
+      virtue: "Fortaleza", emoji: "🦁",
+      feedback: "Frente a una injusticia, el silencio parece prudencia, pero puede ser deficiencia: falta de valentía para defender lo justo. Aristóteles diría que la virtud está en el término medio: ni callar por miedo, ni explotar sin razón.",
+      closing: "La fortaleza es el hábito de actuar con valentía cuando la situación lo exige. No se nace con ella: se forma con decisiones pequeñas y repetidas."
+    },
+    excess: {
+      title: "Explotar no es lo mismo que actuar con justicia",
+      virtue: "Prudencia", emoji: "🧭",
+      feedback: "Responder con agresión puede parecer fuerza, pero es exceso: la emoción toma el lugar de la deliberación. El término medio aristotélico pide prudencia para elegir cómo, cuándo y con qué intensidad actuar.",
+      closing: "La prudencia es la virtud práctica de deliberar bien antes de actuar. En la profesión, permite defender lo justo sin destruir a las personas ni el vínculo."
+    },
+    mean: {
+      title: "Actuar con prudencia y valentía es el término medio",
+      virtue: "Justicia", emoji: "⚖️",
+      feedback: "Elegiste el término medio: ni silencio cómplice ni agresión. Aristóteles llama virtud al hábito de elegir el justo medio según la situación. Aun así, siempre hay una virtud que seguir cultivando: la justicia, para dar a cada uno lo que le corresponde.",
+      closing: "La justicia es el hábito de reconocer y sostener lo que es debido a cada persona. Se forma con decisiones coherentes, incluso cuando cuestan."
+    }
+  };
+
+  const s1CareerInput = document.getElementById("career1");
+
+  document.querySelectorAll("[data-answer]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const r = s1Results[btn.dataset.answer];
+      document.getElementById("s1-career").textContent =
+        s1CareerInput.value.trim() ? "Participante: " + s1CareerInput.value.trim() : "";
+      document.getElementById("s1-emoji").textContent = r.emoji;
+      document.getElementById("s1-virtue").textContent = r.virtue;
+      document.getElementById("s1-title").textContent = r.title;
+      document.getElementById("s1-feedback").textContent = r.feedback;
+      document.getElementById("s1-closing").textContent = r.closing;
+      show("s1-result");
+    });
+  });
+
+  document.getElementById("s1-reset").addEventListener("click", () => {
+    s1CareerInput.value = "";
+    show("s1-question");
+  });
+
+  /* ================= FASE 2 ================= */
+  const AREAS = [
+    { id:"ingenieria", label:"Ingeniería / Tecnología", scenarios:[
+      { text:"Usar datos privados de usuarios para mejorar un algoritmo sin su permiso.", answer:"medio",
+        explain:"La persona se usa como fuente de datos sin consentimiento: se instrumentaliza su información para un fin técnico." },
+      { text:"Pedir consentimiento informado antes de usar datos de usuarios en un nuevo algoritmo.", answer:"fin",
+        explain:"Se reconoce a la persona como fin en sí misma: se respeta su autonomía y su decisión." }
+    ]},
+    { id:"medicina", label:"Medicina / Salud", scenarios:[
+      { text:"Tratar a un paciente solo como un número para cumplir la meta del mes.", answer:"medio",
+        explain:"El paciente deja de ser persona y se convierte en un indicador de productividad." },
+      { text:"Escuchar al paciente y explicarle su diagnóstico antes de decidir el tratamiento juntos.", answer:"fin",
+        explain:"Se reconoce su dignidad y su autonomía: participa en la decisión sobre su propia vida." }
+    ]},
+    { id:"derecho", label:"Derecho", scenarios:[
+      { text:"Tratar a un cliente solo como un caso para ganar el expediente.", answer:"medio",
+        explain:"Se usa al cliente como medio para el prestigio o el éxito profesional." },
+      { text:"Informar al cliente con transparencia aunque eso implique perder el caso.", answer:"fin",
+        explain:"Se respeta su derecho a saber y a decidir; se le trata como fin, no como instrumento del abogado." }
+    ]},
+    { id:"admin", label:"Administración / Finanzas", scenarios:[
+      { text:"Maquillar un informe para cumplir metas y no perder el bono.", answer:"medio",
+        explain:"Se usa la confianza de otros como instrumento para un beneficio propio." },
+      { text:"Reportar el resultado real aunque eso afecte el bono del equipo.", answer:"fin",
+        explain:"Se trata a las personas como fines: merecen información veraz para decidir." }
+    ]},
+    { id:"educacion", label:"Educación", scenarios:[
+      { text:"Aprobar a un estudiante para no tener problemas administrativos.", answer:"medio",
+        explain:"El estudiante se usa como medio para evitar conflictos, no como fin de formación." },
+      { text:"Acompañar al estudiante que está en riesgo aunque requiera más tiempo.", answer:"fin",
+        explain:"Se reconoce al estudiante como fin en sí mismo: su formación importa más que la comodidad del docente." }
+    ]},
+    { id:"comunicacion", label:"Comunicación", scenarios:[
+      { text:"Publicar una noticia sin verificar para ganar clics.", answer:"medio",
+        explain:"La audiencia se usa como medio para generar tráfico; se instrumentaliza su confianza." },
+      { text:"Verificar la fuente antes de publicar aunque se pierda la primicia.", answer:"fin",
+        explain:"Se respeta a la audiencia como fin: merece información veraz para formarse un juicio." }
+    ]},
+    { id:"psicologia", label:"Psicología", scenarios:[
+      { text:"Dar un diagnóstico rápido sin escuchar al paciente para atender más casos.", answer:"medio",
+        explain:"La persona se reduce a un expediente; no se reconoce su dignidad ni su historia." },
+      { text:"Dedicar tiempo a escuchar la historia completa antes de diagnosticar.", answer:"fin",
+        explain:"Se trata al paciente como fin: su experiencia y su voz importan en el proceso." }
+    ]},
+    { id:"arquitectura", label:"Arquitectura", scenarios:[
+      { text:"Diseñar sin consultar a la comunidad afectada para ahorrar tiempo.", answer:"medio",
+        explain:"La comunidad se usa como obstáculo o medio, no como fin de la obra." },
+      { text:"Incluir a la comunidad en las decisiones del proyecto que la afecta.", answer:"fin",
+        explain:"Se reconoce a las personas como fines: su voz y su territorio tienen valor propio." }
+    ]},
+    { id:"general", label:"General", scenarios:[
+      { text:"Usar la confianza de un compañero para obtener un beneficio personal.", answer:"medio",
+        explain:"Se instrumentaliza la confianza de otra persona para un fin propio." },
+      { text:"Reconocer el trabajo de un compañero aunque no te beneficie directamente.", answer:"fin",
+        explain:"Se reconoce a la persona como fin: su esfuerzo tiene valor en sí mismo." }
+    ]}
+  ];
+
+  const areaGrid = document.getElementById("area-grid");
+  AREAS.forEach(a => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "area-btn"; b.textContent = a.label;
+    b.addEventListener("click", () => pickArea(a.id));
+    areaGrid.appendChild(b);
+  });
+
+  let currentArea = null, currentScenario = null, currentChoice = null;
+
+  function pickArea(id) {
+    currentArea = AREAS.find(a => a.id === id) || null;
+    if (!currentArea) return;
+    currentScenario = currentArea.scenarios[Math.floor(Math.random() * currentArea.scenarios.length)];
+    document.getElementById("s2-area-label").textContent = currentArea.label;
+    document.getElementById("s2-scenario-text").textContent = currentScenario.text;
+    document.getElementById("s2-cert").classList.add("hidden");
+    document.getElementById("name2").value = "";
+    show("s2-scenario");
+  }
+
+  document.querySelectorAll("[data-choice]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentChoice = btn.dataset.choice;
+      renderS2Result();
+    });
+  });
+
+  function renderS2Result() {
+    if (!currentScenario) return;
+    const isCorrect = currentChoice === currentScenario.answer;
+    const badge = document.getElementById("s2-badge");
+    const title = document.getElementById("s2-title");
+    const feedback = document.getElementById("s2-feedback");
+    const closing = document.getElementById("s2-closing");
+    const cert = document.getElementById("s2-cert");
+    cert.classList.add("hidden");
+
+    badge.className = "result-badge " + (isCorrect ? "ok" : "bad");
+    badge.textContent = isCorrect ? "✔ Identificación correcta" : "✖ Revisa la distinción";
+
+    if (currentScenario.answer === "medio") {
+      title.textContent = isCorrect
+        ? "Correcto: aquí la persona es tratada como medio"
+        : "Aquí la persona es tratada como medio, no como fin";
+      feedback.textContent = currentScenario.explain +
+        " Kant diría que esto viola la dignidad: la persona no puede usarse solo como instrumento, aunque el fin sea bueno.";
+    } else {
+      title.textContent = isCorrect
+        ? "Correcto: aquí la persona es tratada como fin en sí misma"
+        : "Aquí la persona es tratada como fin, no como medio";
+      feedback.textContent = currentScenario.explain +
+        " Kant diría que esta acción reconoce la dignidad: la persona es valiosa en sí misma, no por lo que produce.";
+    }
+
+    closing.textContent =
+      "Kant no pregunta si la acción es útil, sino si respeta la dignidad de las personas. " +
+      "El imperativo categórico nos pide actuar como si nuestra decisión pudiera convertirse en ley universal.";
+
+    show("s2-result");
+  }
+
+  document.getElementById("s2-sign").addEventListener("click", () => {
+    const name = document.getElementById("name2").value.trim();
+    const nameInput = document.getElementById("name2");
+    if (!name) {
+      nameInput.focus();
+      nameInput.style.borderColor = "#b91c1c";
+      return;
+    }
+    nameInput.style.borderColor = "";
+    const careerText = document.getElementById("career2").value.trim();
+    document.getElementById("cert-name").textContent = name;
+    document.getElementById("cert-career").textContent =
+      careerText || (currentArea ? currentArea.label : "");
+    const d = new Date();
+    document.getElementById("cert-date").textContent =
+      d.toLocaleDateString("es", { day:"2-digit", month:"long", year:"numeric" }) +
+      " · Comparte una captura de este compromiso.";
+    const cert = document.getElementById("s2-cert");
+    cert.classList.remove("hidden");
+    cert.scrollIntoView({ behavior:"smooth", block:"center" });
+  });
+
+  document.getElementById("s2-retry").addEventListener("click", () => {
+    if (currentArea) pickArea(currentArea.id);
+    else show("s2-area");
+  });
+
+  /* ================= FASE 3 ================= */
+  const DILEMMAS = [
+    "Tu jefe te ordena maquillar un informe financiero/técnico para no perder un contrato millonario.",
+    "Un paciente/cliente te ofrece una gran suma de dinero para que ocultes un error grave que cometiste.",
+    "Te ofrecen un ascenso importante si apruebas una auditoría que sabes que está incompleta o es fraudulenta.",
+    "El director de tu institución te pide cambiar la nota de un estudiante porque su padre es un gran donante.",
+    "Tienes la oportunidad de publicar una noticia falsa que te dará millones de clics y fama, pero dañará a una persona inocente.",
+    "Descubres que un colega está cometiendo una falta ética, pero si lo reportas, el equipo entero (incluyéndote) pierde un bono.",
+    "Un familiar de tu paciente te pide con insistencia que le reveles detalles privados de la terapia o el diagnóstico."
+  ];
+
+  const startBtn = document.getElementById("start-btn");
+  const spinBox = document.getElementById("roulette-box");
+  const spinText = document.getElementById("roulette-text");
+  const dilemmaText = document.getElementById("dilemma-text");
+  const timerText = document.getElementById("timer-text");
+  const timerBar = document.getElementById("timer-bar");
+  const finishBtn = document.getElementById("finish-btn");
+  const retryBtn = document.getElementById("retry-btn");
+
+  let timeLeft = 30;
+
+  startBtn.addEventListener("click", () => {
+    show("s3-spin");
+    spinBox.classList.add("spinning");
+    
+    let counter = 0;
+    const shuffleInterval = setInterval(() => {
+      spinText.textContent = DILEMMAS[Math.floor(Math.random() * DILEMMAS.length)];
+      counter++;
+      if (counter > 15) { 
+        clearInterval(shuffleInterval);
+        launchDilemma();
+      }
+    }, 100);
+  });
+
+  function launchDilemma() {
+    spinBox.classList.remove("spinning");
+    const finalDilemma = DILEMMAS[Math.floor(Math.random() * DILEMMAS.length)];
+    dilemmaText.textContent = finalDilemma;
+    
+    timeLeft = 30;
+    updateTimer();
+    show("s3-dilemma");
+    
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      updateTimer();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        show("s3-result");
+      }
+    }, 1000);
+  }
+
+  function updateTimer() {
+    timerText.textContent = timeLeft + "s";
+    const percentage = (timeLeft / 30) * 100;
+    timerBar.style.width = percentage + "%";
+    
+    if (timeLeft <= 10) {
+      timerText.classList.add("danger");
+      timerBar.classList.add("danger");
+      timerBar.classList.remove("warn");
+    } else if (timeLeft <= 20) {
+      timerText.classList.remove("danger");
+      timerBar.classList.add("warn");
+      timerBar.classList.remove("danger");
+    } else {
+      timerText.classList.remove("danger");
+      timerBar.classList.remove("warn", "danger");
+    }
+  }
+
+  finishBtn.addEventListener("click", () => {
+    if (timerInterval) clearInterval(timerInterval);
+    show("s3-result");
+  });
+
+  retryBtn.addEventListener("click", () => {
+    if (timerInterval) clearInterval(timerInterval);
+    show("s3-intro");
+  });
+
+  // Inicializar
+  show("home");
+})();
+</script>
+</body>
+</html>
